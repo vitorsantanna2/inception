@@ -1,0 +1,18 @@
+version: "3"
+services:
+  nginx:  
+      build:
+        context: ./requirements/nginx
+        args:
+          SSIGNEDCRT: $SSIGNEDCRT
+          SSIGNEDKEY: $SSIGNEDKEY
+      env_file:
+      - .env
+      networks:
+        - inception-network
+      ports:
+        - "443:443"
+      restart: on-failure
+networks:
+  inception-network:
+    name: inception-network

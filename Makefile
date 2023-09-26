@@ -1,13 +1,11 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jsantann <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/07/19 15:29:49 by jsantann          #+#    #+#              #
-#    Updated: 2023/07/19 15:30:10 by jsantann         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
+SHELL := /bin/bash
 name = inception
+
+build:
+		set -a
+		cd ./srcs && source .env
+		cd ./srcs && docker compose build
+		cd ./srcs && docker compose up
+
+all:
+	build
