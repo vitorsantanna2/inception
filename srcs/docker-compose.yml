@@ -13,6 +13,16 @@ services:
       ports:
         - "443:443"
       restart: on-failure
+  mariadb:
+      build:
+        context: ./requirements/mariadb
+      container_name: mariadb
+      env_file:
+      - .env
+      networks:
+        - inception-network
+      ports:
+        - "3306:3306"
 networks:
   inception-network:
     name: inception-network

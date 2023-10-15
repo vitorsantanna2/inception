@@ -8,7 +8,6 @@ ENV SSIGNEDCRT=$SSIGNEDCRT
 ARG SSIGNEDKEY
 ENV SSIGNEDKEY=$SSIGNEDKEY
 
-RUN mkdir -p /etc/nginx
 COPY ./conf/nginx.conf /etc/nginx/
 COPY ./tools/genSSL.sh  /
 
