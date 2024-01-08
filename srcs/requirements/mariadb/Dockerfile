@@ -1,14 +1,18 @@
 FROM debian:bullseye
 
-RUN apt-get update
+ARG DB_NAME \
+    DB_USER \
+    DB_PASS
 
-#RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash
+ENV DB_NAME=$DB_NAME
+ENV DB_USER=$DB_USER
+ENV DB_PASS=$DB_PASS
 
-RUN apt-get install -y mariadb-server
+RUN apt update && apt install -y mariadb-server
 
 RUN mariadb-install-db --user=mysql --basedir=/usr --datadir=/database
 
-COPY ./tools/setup.sh /
-RUN chmod +x /setup.sh
+COPY conf/setup.cnf /etc/mysql/mariadb/conf.d/50-server.cnf
+COPY ./tools/create-db.sh /bin/
 
-CMD /setup.sh
+CMD ["sh", "/bin/create-db.sh"]

@@ -1,28 +1,40 @@
 version: "3"
+
 services:
-  nginx:  
-      build:
-        context: ./requirements/nginx
-        args:
-          SSIGNEDCRT: $SSIGNEDCRT
-          SSIGNEDKEY: $SSIGNEDKEY
-      env_file:
-      - .env
-      networks:
-        - inception-network
-      ports:
-        - "443:443"
-      restart: on-failure
+  nginx:
+    build:
+      context: .
+      dockerfile: requirements/nginx/Dockerfile
+    container_name: nginx
+#    depends_on:
+#      - wordpress
+    ports:
+      - "443:443"
+    volumes:
+      - ./requirements/nginx/conf/:/etc/nginx/http.d/
+      - ./requirements/nginx/tools:/etc/nginx/ssl/
+      - /home/${USER}/simple_docker_nginx_html/public/html:/var/www/
+    restart: always
+
   mariadb:
-      build:
-        context: ./requirements/mariadb
-      container_name: mariadb
-      env_file:
-      - .env
-      networks:
-        - inception-network
-      ports:
-        - "3306:3306"
-networks:
-  inception-network:
-    name: inception-network
+    build:
+      args:
+        DB_NAME: ${DB_NAME}
+        DB_PASS: ${DB_PASS}
+        DB_USER: ${DB_USER}
+        DB_ROOT: ${DB_ROOT}
+      context: ./requirements/mariadb/.
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+        type: none
+        o: bind
+        device: /home/jsantann/data/mariadb

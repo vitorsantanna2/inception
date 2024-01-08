@@ -1,17 +1,7 @@
-FROM debian:bullseye
+FROM alpine:3.18
 
-RUN apt-get update && apt-get install -y nginx openssl
+RUN apk update && apk upgrade && apk add --no-cache nginx
 
-ARG SSIGNEDCRT
-ENV SSIGNEDCRT=$SSIGNEDCRT
+EXPOSE 443
 
-ARG SSIGNEDKEY
-ENV SSIGNEDKEY=$SSIGNEDKEY
-
-COPY ./conf/nginx.conf /etc/nginx/
-COPY ./tools/genSSL.sh  /
-
-RUN chmod +x /genSSL.sh
-RUN ./genSSL.sh
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
