@@ -1,18 +1,26 @@
-FROM debian:bullseye
+FROM alpine:3.18
 
 ARG DB_NAME \
     DB_USER \
     DB_PASS
 
-ENV DB_NAME=$DB_NAME
-ENV DB_USER=$DB_USER
-ENV DB_PASS=$DB_PASS
+RUN apk update && apk add --no-cache mariadb mariadb-client
 
-RUN apt update && apt install -y mariadb-server
+RUN mkdir /var/run/mysqld; \
+    chmod 777 /var/run/mysqld; \
+    { echo '[mysqld]'; \
+      echo 'skip-host-cache'; \
+      echo 'skip-name-resolve'; \
+      echo 'bind-address=0.0.0.0'; \
+    } | tee  /etc/my.cnf.d/docker.cnf; \
+    sed -i "s|skip-networking|skip-networking=0|g" \
+      /etc/my.cnf.d/mariadb-server.cnf
 
-RUN mariadb-install-db --user=mysql --basedir=/usr --datadir=/database
+RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-COPY conf/mariadb.conf /etc/mysql/mariadb/conf.d/50-server.cnf
-COPY ./tools/create-db.sh /bin/
+EXPOSE 3306
 
-CMD ["sh", "/bin/create-db.sh"]
+COPY requirements/mariadb/conf/create_db.sh .
+RUN sh create_db.sh && rm create_db.sh
+USER mysql
+CMD ["/usr/bin/mysqld", "--skip-log-error"]

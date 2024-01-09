@@ -14,21 +14,26 @@ services:
       - ./requirements/nginx/conf/:/etc/nginx/http.d/
       - ./requirements/nginx/tools:/etc/nginx/ssl/
       - wordpress_data:/var/www/
+    networks:
+      - inception
     restart: always
 
   mariadb:
     build:
+      context: .
+      dockerfile: requirements/mariadb/Dockerfile
       args:
         DB_NAME: ${DB_NAME}
         DB_PASS: ${DB_PASS}
         DB_USER: ${DB_USER}
         DB_ROOT: ${DB_ROOT}
-      context: ./requirements/mariadb/.
     container_name: mariadb
     ports:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
     restart: always
   wordpress:
     build:
@@ -42,6 +47,8 @@ services:
     depends_on:
       - mariadb
     restart: always
+    ports: 
+      - "9000:9000"
     networks:
       - inception
     volumes:
