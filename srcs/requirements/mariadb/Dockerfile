@@ -12,7 +12,7 @@ RUN apt update && apt install -y mariadb-server
 
 RUN mariadb-install-db --user=mysql --basedir=/usr --datadir=/database
 
-COPY conf/setup.cnf /etc/mysql/mariadb/conf.d/50-server.cnf
+COPY conf/mariadb.conf /etc/mysql/mariadb/conf.d/50-server.cnf
 COPY ./tools/create-db.sh /bin/
 
 CMD ["sh", "/bin/create-db.sh"]
