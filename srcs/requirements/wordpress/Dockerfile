@@ -3,6 +3,11 @@ ARG PHP_VERSION=82 \
     DB_NAME \
     DB_USER \
     DB_PASS
+
+ENV DB_NAME=${DB_NAME}
+ENV DB_PASS=${DB_PASS}
+ENV DB_USER=${DB_USER}
+
 RUN apk update && apk upgrade && apk add --no-cache \
     php${PHP_VERSION} \
     php${PHP_VERSION}-fpm \
@@ -38,5 +43,9 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/bin/wp && \
     ln -s /usr/bin/php82 /usr/bin/php && \
-    wp --info  
-CMD ["/usr/sbin/php-fpm82", "-F"]
+    wp --info
+
+COPY requirements/wordpress/conf/startwp.sh /usr/bin/
+RUN chmod +x /usr/bin/startwp.sh
+
+CMD /usr/bin/startwp.sh
