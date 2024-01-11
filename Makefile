@@ -29,8 +29,7 @@ fclean:
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
-	@sudo rm -rf ~/data/wordpress/*
-	@sudo rm -rf ~/data/mariadb/*
+	@sudo rm -rf ~/data
 	@docker volume rm srcs_mariadb_data
 	@docker volume rm srcs_wordpress_data
 

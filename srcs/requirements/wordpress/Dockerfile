@@ -2,12 +2,22 @@ FROM alpine:3.18
 ARG PHP_VERSION=82 \
     DB_NAME \
     DB_USER \
-    DB_PASS
+    DB_PASS \
+    WP_ADMIN \
+    WP_ADMIN_PASS \
+    WP_ADMIN_EMAIL \
+    WP_USER \
+    WP_USER_EMAIL
 
 ENV DB_NAME=${DB_NAME}
 ENV DB_PASS=${DB_PASS}
 ENV DB_USER=${DB_USER}
-
+ENV WP_ADMIN=${WP_ADMIN}
+ENV WP_ADMIN_PASS=${WP_ADMIN_PASS}
+ENV WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}
+ENV WP_USER=${WP_USER}
+ENV WP_USER_EMAIL=${WP_USER_EMAIL}
+ 
 RUN apk update && apk upgrade && apk add --no-cache \
     php${PHP_VERSION} \
     php${PHP_VERSION}-fpm \
