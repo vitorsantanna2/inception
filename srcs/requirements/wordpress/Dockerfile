@@ -33,6 +33,7 @@ RUN apk update && apk upgrade && apk add --no-cache \
     php${PHP_VERSION}-zip \
     php${PHP_VERSION}-redis \
     php${PHP_VERSION}-phar \
+    php${PHP_VERSION}-gd \
     wget \
     unzip && \
     sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" \
@@ -43,10 +44,6 @@ RUN apk update && apk upgrade && apk add --no-cache \
       /etc/php82/php-fpm.d/www.conf && \
     rm -f /var/cache/apk/*
 WORKDIR /var/www
-RUN wget https://wordpress.org/latest.zip && \
-    unzip latest.zip && \
-    cp -rf wordpress/* . && \
-    rm -rf wordpress latest.zip
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     php82 wp-cli.phar --info && \
