@@ -54,5 +54,4 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 
 COPY requirements/wordpress/conf/startwp.sh /usr/bin/
 RUN chmod +x /usr/bin/startwp.sh
-
 CMD /usr/bin/startwp.sh
