@@ -5,6 +5,9 @@ services:
     build:
       context: .
       dockerfile: requirements/nginx/Dockerfile
+      args:
+        SSLCRT: ${SSLCRT}
+        SSLKEY: ${SSLKEY}
     container_name: nginx
     depends_on:
       - wordpress
@@ -12,7 +15,6 @@ services:
       - "443:443"
     volumes:
       - ./requirements/nginx/conf/:/etc/nginx/http.d/
-      - ./requirements/nginx/tools:/etc/nginx/ssl/
       - wordpress_data:/var/www/
     networks:
       - inception
